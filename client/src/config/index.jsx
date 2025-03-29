@@ -144,13 +144,13 @@ export const registerFormControls = [
     {
       id: "About",
       label: "About",
-      path: "/shop/search",
+      path: "/shop/About",
     },
     
     {
       id: "Contact",
       label: "Contact",
-      path: "/shop/search",
+      path: "/shop/Contact",
     },
    
  

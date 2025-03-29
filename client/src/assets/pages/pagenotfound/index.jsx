@@ -12,7 +12,7 @@ import {
   
 function PageNotfound() {
     return ( 
-       <div>gdshxb</div>
+       <div className="text-white">gdshxbnemc njew chje chjne chjebnchjaBCFHJNERB CHJNBRE HJVJB RHJVCB EVRHJV RHJV JENV EJV EHJRV HJVVDHJR RHJV HJRSB EHJ </div>
      );
 }
 

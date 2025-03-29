@@ -103,12 +103,12 @@ function MenuItem({ onLinkClick }) {
                     ))}
                     {/* Categories dropdown for large screens */}
                     <DropdownMenu >
-                    <DropdownMenuTrigger asChild>
-  <Button className="font-bold text-white text-1xl flex items-center gap-1 hover:text-purple-400 sm:hidden lg:flex">
-    Categories
-    <FiChevronDown className="text-lg" />
-  </Button>
-</DropdownMenuTrigger>
+                        <DropdownMenuTrigger asChild>
+                            <Button className="font-bold text-white text-1xl  items-center gap-1 hover:text-purple-400 hidden lg:flex">
+                                Categories
+                                <FiChevronDown className="text-lg" />
+                            </Button>
+                        </DropdownMenuTrigger>
 
                         <DropdownMenuContent className="w-56 bg-gray-800 shadow-lg rounded-lg p-3 cursor-pointer">
                             {categoryItems.map((item) => (
@@ -146,7 +146,16 @@ function Shoppingheader() {
     const [open, setOpen] = useState(false);
 
     return (
-        <header className="top-0 z-40 w-full border-b bg-gray-900 py-4 fixed">
+        <header
+            className="top-0 z-40 w-full border-b py-3 fixed"
+            style={{ background: "rgba(32, 42, 60, 0.7)", backdropFilter: "blur(10px)" }}
+        >
+
+
+
+
+
+
             <div className="relative h-16 flex items-center justify-between px-4 md:px-6">
                 {/* Logo (Top-Left) */}
                 <Link to="/shop/home" className="absolute left-4 top-4 flex items-center gap-2">

@@ -9,6 +9,7 @@ import { fetchAllProducts } from '@/store/Adminproduct-slice';
 import { fetchAllFilterProducts } from '@/store/shop/shopproduct';
 import ShoppingProducttile from '@/assets/components/shoppingview/shoppingproducttile';
 import { useSearchParams } from 'react-router-dom';
+import ProductCard from '@/assets/components/common/ProductCard';
 
 console.log(sortOptions);
 
@@ -83,11 +84,11 @@ function ShoppingListing() {
     console.log(productList)
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-6 p-6 md:p-6 ">
+        <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-6 p-6 md:p-6  bg-black text-white">
             <ProductFilter filter={filter} handlefilter={handleFilter} />
             <div className="bg-background w-full rounded-lg shadow-sm">
-                <div className="p-4 border-b flex items-center justify-between">
-                    <h2 className="text-lg font-extrabold">All products</h2>
+                <div className="p-4 border-b flex items-center justify-between lg:mt-19">
+                    <h2 className="text-lg font-extrabold text-white ">All products</h2>
                     <div className="flex items-center gap-3">
                         <span>{productList.length}</span>
                         <DropdownMenu>
@@ -113,10 +114,10 @@ function ShoppingListing() {
                         </DropdownMenu>
                     </div>
                 </div>
-                <div className='grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3'>
+                <div className='grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 m-2'>
                     {
                         productList && productList.length > 0 ?
-                            productList.map(e => <ShoppingProducttile key={e.id} product={e} />) : null
+                            productList.map(e => <ProductCard key={e.id} product={e} />) : null
                     }
                 </div>
             </div>

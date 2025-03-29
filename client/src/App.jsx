@@ -19,6 +19,8 @@ import { Toaster } from "react-hot-toast";
 import CheckAuth from './assets/components/common/checkauth';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkAuth } from './store/auth-slice';
+import Contactpage from './assets/pages/shoppingview/Contact';
+import Aboutpage from './assets/pages/shoppingview/About';
 
 const App = () => {
   
@@ -34,7 +36,7 @@ const App = () => {
   console.log(isLoading,user);
 
   return (
-    <div className="flex flex-col overflow-hidden bg-white">
+    <div className="flex flex-col overflow-hidden ">
       
       <Toaster position="top-right" reverseOrder={false} />
       <Routes>
@@ -64,6 +66,8 @@ const App = () => {
           <Route path="listing" element={<ShoppingListing />} />
           <Route path="account" element={<ShoppingAcc />} />
           <Route path="checkout" element={<Shoppingcheckout />} />
+          <Route path="contact" element={<Contactpage />} />
+          <Route path="About" element={<Aboutpage />} />
         </Route>
 
         <Route path="*" element={<PageNotfound />} />

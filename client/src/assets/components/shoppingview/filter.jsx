@@ -6,9 +6,9 @@ import { Checkbox } from '../ui/Checkbox';
 
 function ProductFilter({ filter, handlefilter }) {
     return (
-        <div className="bg-background rounded-lg shadow-sm">
+        <div className="bg-background rounded-lg shadow-sm bg-black mt-20">
             <div className="p-4 border-b">
-                <h2 className="text-lg font-bold text-gray-900">Product Filter</h2>
+                <h2 className="text-lg font-bold text-white">Product Filter</h2>
             </div>
             <div className='p-4 space-y-4'>
                 {
