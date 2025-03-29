@@ -191,7 +191,7 @@ function Aboutpage() {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="group"
               >
-                <div className="aspect-w-1 aspect-h-1 mb-4 overflow-hidden rounded-2xl relative">
+                <div className="aspect-w-1 aspect-h-1 mb-4 overflow-hidden rounded-2xl ">
                   <img
                     src={member.image}
                     alt={member.name}
