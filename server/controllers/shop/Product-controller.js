@@ -2,7 +2,7 @@ const Product = require("../../models/Products");
 
 const getFilteredProducts = async (req, res) => {
   try {
-    const { category = [], brand = [], sortBy = "price-lowtohigh" } = req.query;
+    const { category = [], color = [], sortBy = "price-lowtohigh" } = req.query;
 
     let filters = {};
 
@@ -10,33 +10,27 @@ const getFilteredProducts = async (req, res) => {
       filters.category = { $in: category.split(",") };
     }
 
-    if (brand.length) {
-      filters.brand = { $in: brand.split(",") };
+    if (color.length) {
+      filters.color = { $in: color.split(",") };
     }
 
     let sort = {};
 
     switch (sortBy) {
       case "price-lowtohigh":
-        sort.price = 1;
-
+        sort.salePrice = 1;  // Changed from price to salePrice
         break;
       case "price-hightolow":
-        sort.price = -1;
-
+        sort.salePrice = -1;  // Changed from price to salePrice
         break;
       case "title-atoz":
-        sort.title = 1;
-
+        sort.productName = 1;  // Also fixed this to match schema (productName instead of title)
         break;
-
       case "title-ztoa":
-        sort.title = -1;
-
+        sort.productName = -1;  // Also fixed this to match schema (productName instead of title)
         break;
-
       default:
-        sort.price = 1;
+        sort.salePrice = 1;  // Changed from price to salePrice
         break;
     }
 
@@ -47,10 +41,59 @@ const getFilteredProducts = async (req, res) => {
       data: products,
     });
   } catch (e) {
-    console.log(error);
+    console.log(e);
     res.status(500).json({
       success: false,
-      message: "Some error occured",
+      message: "Some error occurred",
+    });
+  }
+};
+
+const getLimitedProducts = async (req, res) => {
+  try {
+    const { category = [], color = [], sortBy = "price-lowtohigh", limit = 5 } = req.query;
+
+    let filters = {};
+
+    if (category.length) {
+      filters.category = { $in: category.split(",") };
+    }
+
+    if (color.length) {
+      filters.color = { $in: color.split(",") };
+    }
+
+    let sort = {};
+
+    switch (sortBy) {
+      case "price-lowtohigh":
+        sort.salePrice = 1;
+        break;
+      case "price-hightolow":
+        sort.salePrice = -1;
+        break;
+      case "title-atoz":
+        sort.productName = 1;
+        break;
+      case "title-ztoa":
+        sort.productName = -1;
+        break;
+      default:
+        sort.salePrice = 1;
+        break;
+    }
+
+    const products = await Product.find(filters).sort(sort).limit(parseInt(limit));
+
+    res.status(200).json({
+      success: true,
+      data: products,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({
+      success: false,
+      message: "Some error occurred",
     });
   }
 };
@@ -71,12 +114,12 @@ const getProductDetails = async (req, res) => {
       data: product,
     });
   } catch (e) {
-    console.log(error);
+    console.log(e);
     res.status(500).json({
       success: false,
-      message: "Some error occured",
+      message: "Some error occurred",
     });
   }
 };
 
-module.exports = { getFilteredProducts, getProductDetails };
+module.exports = { getFilteredProducts, getLimitedProducts, getProductDetails };

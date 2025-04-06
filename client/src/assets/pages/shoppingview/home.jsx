@@ -1,19 +1,23 @@
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import CarouselSlider from "@/assets/components/elements/CarouselSlider";
 import { categories } from "../../../config/index";
 import FeaturesSection from "@/assets/components/elements/FeaturesSection";
-import Fotter from "@/assets/components/common/Footer";
 import Footer from "@/assets/components/common/Footer";
 
 function ShoppingHome() {
+    const { user } = useSelector(state => state.auth);
+    const userId = user?.id;
+
     return (
         <div className="bg-black">
             <CarouselSlider />
             <section className="py-8">
                 <div className="container mx-auto px-4">
                     <h2 className="text-3xl font-bold mb-6 text-center text-white">Shop By Category</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 lg:ml-[30%]">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
                         {categories.map((category, index) => (
                             <motion.div
                                 key={index}
@@ -23,7 +27,7 @@ function ShoppingHome() {
                                 viewport={{ once: true }}
                                 className="relative bg-white shadow-md rounded-lg overflow-hidden transform transition-transform duration-300 h-52"
                             >
-                                <Link to={`/products/${category.slug}`} className="block w-full h-full">
+                                <Link to={`/shop/${category.slug}`} className="block w-full h-full">
                                     <img
                                         src={category.image}
                                         alt={category.name}
@@ -43,9 +47,9 @@ function ShoppingHome() {
                     </div>
                 </div>
             </section>
-            <FeaturesSection />
+            <FeaturesSection userId={userId} />
             <section className="text-center">
-                <div className=" bg-[#252525]  mt-3 rounded-2xl p-6 text-center">
+                <div className="bg-[#252525] mt-3 rounded-2xl p-6 text-center">
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 items-center justify-center">
                         <motion.div
                             className="p-8 text-center rounded-lg transition-transform duration-300 ease-in-out"
@@ -98,9 +102,7 @@ function ShoppingHome() {
                     </div>
                 </div>
             </section>
-            <Footer/>
-
-
+            <Footer />
         </div>
     );
 }

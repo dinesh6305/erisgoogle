@@ -5,6 +5,8 @@ import CommonForm from "../../components/common/commonform";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../../store/auth-slice";
 import { toast } from "react-hot-toast";
+import GoogleAuth from "../../components/auth/GoogleAuth";
+
 const initialState = {
   email: "",
   password: "",
@@ -12,25 +14,19 @@ const initialState = {
 
 function AuthLogin() {
   const [formData, setFormData] = useState(initialState);
-  const dispatch=useDispatch();
-  
-
+  const dispatch = useDispatch();
 
   const onSubmit = (event) => {
     event.preventDefault();
     console.log("Form submitted with data:", formData);
-    dispatch(loginUser(formData)).then((data)=>{
+    dispatch(loginUser(formData)).then((data) => {
       console.log(data);
-      if(data?.payload?.success){
+      if (data?.payload?.success) {
         toast.success("Login Success");
-        
-
+      } else {
+        toast.error("Login failed, please try again");
       }
-      else{
-      toast.success("failed try again");
-      }
-
-    })
+    });
   };
 
   return (
@@ -51,6 +47,10 @@ function AuthLogin() {
         setFormData={setFormData}
         onSubmit={onSubmit}
       />
+
+      <div className="text-center">
+        <GoogleAuth />
+      </div>
     </div>
   );
 }

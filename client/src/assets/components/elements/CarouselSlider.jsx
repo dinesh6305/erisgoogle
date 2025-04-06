@@ -35,7 +35,7 @@ const CarouselSlider = () => {
               >
                 <h1 className="text-3xl md:text-5xl font-bold mb-5">Experience Sound Like Never Before</h1>
                 <p className="text-base md:text-lg mb-8">Immerse yourself in crystal clear audio with our premium headphones</p>
-                <Link to="/products/headphones" className="inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-md transition-transform transform hover:bg-blue-700 hover:translate-y-[-3px]">Shop Now</Link>
+                <Link to="/shop/headphones" className="inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-md transition-transform transform hover:bg-blue-700 hover:translate-y-[-3px]">Shop Now</Link>
               </motion.div>
             </div>
           </div>
@@ -56,7 +56,7 @@ const CarouselSlider = () => {
               >
                 <h1 className="text-3xl md:text-5xl font-bold mb-5">Wireless Freedom</h1>
                 <p className="text-base md:text-lg mb-8">Cut the cord with our latest true wireless earbuds</p>
-                <Link to="/products/earphones" className="inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-md transition-transform transform hover:bg-blue-700 hover:translate-y-[-3px]">Explore Now</Link>
+                <Link to="/shop/earbuds" className="inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-md transition-transform transform hover:bg-blue-700 hover:translate-y-[-3px]">Explore Now</Link>
               </motion.div>
             </div>
           </div>

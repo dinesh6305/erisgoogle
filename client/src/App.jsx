@@ -22,9 +22,18 @@ import { checkAuth } from './store/auth-slice';
 import Contactpage from './assets/pages/shoppingview/Contact';
 import Aboutpage from './assets/pages/shoppingview/About';
 
+import ProductDetail from './assets/components/shoppingview/ProductDetails';
+import Cart from './assets/components/Cart/cart';
+import StaticCartPage from './assets/components/Cart/cartdemo';
+import Earphone from './assets/pages/Headphones';
+import Earbuds from './assets/pages/earbuds';
+import Headphones from './assets/pages/Headphones';
+import Neckband from './assets/pages/Neckbands';
+
+
 const App = () => {
-  
-  const { user,isAuthenticated,isLoading } = useSelector(state => state.auth);
+
+  const { user, isAuthenticated, isLoading } = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -33,11 +42,11 @@ const App = () => {
 
   if (isLoading) return <div>Loading....</div>;
 
-  console.log(isLoading,user);
+  console.log(isLoading, user, "fromapp.js");
 
   return (
-    <div className="flex flex-col overflow-hidden ">
-      
+    <div className="flex flex-col ">
+
       <Toaster position="top-right" reverseOrder={false} />
       <Routes>
         {/* Auth Routes */}
@@ -59,19 +68,36 @@ const App = () => {
         </Route>
 
         {/* Shopping Routes */}
-        <Route path="/shop" element={<CheckAuth isAuthenticated={isAuthenticated} user={user}>
-          <Shoppinglayout />
-        </CheckAuth>}>
+        <Route path="/shop" element={
+          <Shoppinglayout />}>
+
           <Route path="home" element={<ShoppingHome />} />
           <Route path="listing" element={<ShoppingListing />} />
-          <Route path="account" element={<ShoppingAcc />} />
+          <Route path="account" element={
+
+            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+              <ShoppingAcc />
+            </CheckAuth>
+          } />
           <Route path="checkout" element={<Shoppingcheckout />} />
           <Route path="contact" element={<Contactpage />} />
           <Route path="About" element={<Aboutpage />} />
+          <Route path="headphones" element={<Headphones />} />
+          <Route path="neckbands" element={<Neckband />} />
+          <Route path="earbuds" element={<Earbuds />} />
+
+          <Route path="cart" element={
+            <Cart userId={user?.id} />
+          } />
+
         </Route>
+        <Route path="/cart1" element={<StaticCartPage />} />
+
 
         <Route path="*" element={<PageNotfound />} />
         <Route path="/unauth-page" element={<Unauthpage />} />
+        <Route path="/product/:id" element={<ProductDetail userId={user?.id} />} />
+
       </Routes>
     </div>
   );

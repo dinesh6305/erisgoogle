@@ -1,10 +1,27 @@
-const express=require('express')
-const {handleImageUpload,addProduct,fetchProducts,editProduct,deleteProduct}=require("../../controllers/admin/products-controllers")
-const {upload}=require("../../helper/Cloudinary")
-const router=express.Router()
-router.post('/upload-image',upload.single("my_file"),handleImageUpload);
-router.post("/add", addProduct);
-router.put("/edit/:id", editProduct);
-router.delete("/delete/:id", deleteProduct);
-router.get("/get", fetchProducts);
+const express = require("express");
+const RateLimit = require("express-rate-limit");
+
+const {
+  handleImageUpload,
+  addProduct,
+  editProduct,
+  fetchAllProducts,
+  deleteProduct,
+} = require("../../controllers/admin/products-controllers");
+
+const { upload } = require("../../helper/Cloudinary");
+
+const router = express.Router();
+
+const limiter = RateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
+
+router.post("/upload-image", upload.single("file"), handleImageUpload);
+router.post("/add", limiter, addProduct);
+router.put("/edit/:id", limiter, editProduct);
+router.delete("/delete/:id", limiter, deleteProduct);
+router.get("/get", limiter, fetchAllProducts);
+
 module.exports = router;

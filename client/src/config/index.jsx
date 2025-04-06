@@ -1,11 +1,11 @@
 export const registerFormControls = [
   {
-      name: 'userName',
-      label: 'UserName',
-      placeholder: 'Enter your userName',
-      componentType: 'input',
-      type: 'text',
-    },
+    name: 'userName',
+    label: 'UserName',
+    placeholder: 'Enter your userName',
+    componentType: 'input',
+    type: 'text',
+  },
   {
     name: 'email',
     label: 'Email',
@@ -16,13 +16,13 @@ export const registerFormControls = [
   {
     name: 'password',
     label: 'Password',
-    placeholder: 'Enter your password', // Fixed placeholder
+    placeholder: 'Enter your password',
     componentType: 'input',
-    type: 'password', // Changed type to 'password' for security
+    type: 'password',
   }
 ];
+
 export const LoginFormControls = [
-  
   {
     name: 'email',
     label: 'Email',
@@ -33,9 +33,9 @@ export const LoginFormControls = [
   {
     name: 'password',
     label: 'Password',
-    placeholder: 'Enter your password', // Fixed placeholder
+    placeholder: 'Enter your password',
     componentType: 'input',
-    type: 'password', // Changed type to 'password' for security
+    type: 'password',
   }
 ];
 
@@ -64,11 +64,11 @@ export const adminSidebarMenuItems = [
 
 export const addProductFormElements = [
   {
-    label: "Title",
-    name: "title",
+    label: "Product Name",
+    name: "productName",
     componentType: "input",
     type: "text",
-    placeholder: "Enter product title",
+    placeholder: "Enter product name",
   },
   {
     label: "Description",
@@ -77,17 +77,25 @@ export const addProductFormElements = [
     placeholder: "Enter product description",
   },
   {
+    label: "Product Type",
+    name: "productType",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter product type",
+  },
+  {
     label: "Category",
     name: "category",
     componentType: "select",
     options: [
-      { id: "earphone", label: "Earphone" },
+      { id: "headphone", label: "Headphone" },
       { id: "earbuds", label: "Earbuds" },
+      { id: "neckband", label: "Neckband" }, // Changed from speaker to neckband
     ],
   },
   {
     label: "Color",
-    name: "brand",
+    name: "color",
     componentType: "select",
     options: [
       { id: "white", label: "White" },
@@ -95,6 +103,13 @@ export const addProductFormElements = [
       { id: "gray", label: "Gray" },
       { id: "orange", label: "Orange" },
     ],
+  },
+  {
+    label: "Trend",
+    name: "trend",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter product trend",
   },
   {
     label: "Price",
@@ -108,11 +123,18 @@ export const addProductFormElements = [
     name: "salePrice",
     componentType: "input",
     type: "number",
-    placeholder: "Enter sale price (optional)",
+    placeholder: "Enter sale price (required)",
+  },
+  {
+    label: "Discount",
+    name: "discount",
+    componentType: "input",
+    type: "number",
+    placeholder: "Enter discount",
   },
   {
     label: "Total Stock",
-    name: "totalStock",
+    name: "stockQuantity",
     componentType: "input",
     type: "number",
     placeholder: "Enter total stock",
@@ -126,34 +148,41 @@ export const shoppingViewHeaderMenuItems = [
     path: "/shop/home",
   },
   {
-    id: "Earphones",
-    label: "Earphones",
-    path: "/shop/listing",
+    id: "headphone",
+    label: "Headphone",
+    path: "/shop/headphones",
   },
   {
-    id: "Headphones",
-    label: "Headphones",
-    path: "/shop/listing",
+    id: "neckband", // Changed from speaker to neckband
+    label: "Neckband", // Changed label from Speaker to Neckband
+    path: "/shop/neckbands", // Changed path from speaker to neckband
   },
-
+  {
+    id: "Earbuds",
+    label: "Earbuds",
+    path: "/shop/earbuds",
+  },
   {
     id: "About",
     label: "About",
     path: "/shop/About",
   },
-  
   {
     id: "Contact",
     label: "Contact",
     path: "/shop/Contact",
   },
- 
-
-  
+  {
+    id: "Product",
+    label: "Product",
+    path: "/shop/listing",
+  },
 ];
+
 export const categoryOptionsMap = {
-  earphone: "Earphone",
+  neckband: "Neckband", // Changed from speaker to neckband
   earbuds: "Earbuds",
+  headphones: "Headphones",
 };
 
 export const brandOptionsMap = {
@@ -165,23 +194,32 @@ export const brandOptionsMap = {
 
 export const filterOptions = {
   category: [
-    { id: "earphone", label: "Earphone" },
+    { id: "headphone", label: "Headphone" },
     { id: "earbuds", label: "Earbuds" },
+    { id: "neckband", label: "Neckband" }, // Changed from speaker to neckband
   ],
-  brand: [
+  color: [
     { id: "white", label: "White" },
     { id: "black", label: "Black" },
     { id: "gray", label: "Gray" },
     { id: "orange", label: "Orange" },
   ],
 };
+
 export const sortOptions = [
   { id: "price-lowtohigh", label: "Price: Low to High" },
   { id: "price-hightolow", label: "Price: High to Low" },
-  { id: "title-atoz", label: "Title: A to Z" },
-  { id: "title-ztoa", label: "Title: Z to A" },
+  
 ];
+
 export const addressFormControls = [
+  {
+    label: "Name",
+    name: "name",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter your name",
+  },
   {
     label: "Address",
     name: "address",
@@ -217,10 +255,11 @@ export const addressFormControls = [
     placeholder: "Enter any additional notes",
   },
 ];
+
 export const categories = [
   {
-    name: 'Earphones',
-    slug: 'earphones',
+    name: 'Earbuds',
+    slug: 'earbuds',
     image: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1632&q=80'
   },
   {
@@ -228,7 +267,11 @@ export const categories = [
     slug: 'headphones',
     image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80'
   },
-  
+  {
+    name: 'Neckband', // Changed from Speaker to Neckband
+    slug: 'neckbands', // Changed from speaker to neckband
+    image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80'
+  },
 ];
 
 export const featuredProducts = [
@@ -259,7 +302,7 @@ export const featuredProducts = [
   {
     id: 3,
     name: 'Stone 1500',
-    category: 'Speakers',
+    category: 'Neckbands', // Changed from Speakers to Neckbands
     price: 79.99,
     oldPrice: 99.99,
     discount: 20,
@@ -307,7 +350,7 @@ export const featuredProducts = [
   {
     id: 7,
     name: 'Stone 650',
-    category: 'Speakers',
+    category: 'Neckbands', // Changed from Speakers to Neckbands
     price: 49.99,
     oldPrice: null,
     discount: null,

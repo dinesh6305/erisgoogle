@@ -1,18 +1,20 @@
+import React from 'react';
+
 function CommonForm({ formControls, formData, setFormData, onSubmit, buttonText, isButtondis }) {
   
   function renderInputsByComponentType(getControlItem) {
-    const value = formData[getControlItem.name] ?? ""; // ✅ Proper handling of undefined values
+    const value = formData[getControlItem.name] ?? ""; // Proper handling of undefined values
     let element = null;
 
     switch (getControlItem.componentType) {
       case "input":
         element = (
           <input
-            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-700"
             name={getControlItem.name}
             placeholder={getControlItem.placeholder}
             id={getControlItem.name}
-            type={getControlItem.type || "text"} // ✅ Default type if not provided
+            type={getControlItem.type || "text"} // Default type if not provided
             value={value}
             onChange={(event) => setFormData({ ...formData, [getControlItem.name]: event.target.value })}
           />
@@ -40,7 +42,7 @@ function CommonForm({ formControls, formData, setFormData, onSubmit, buttonText,
       case "textarea":
         element = (
           <textarea
-            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-700"
             name={getControlItem.name}
             placeholder={getControlItem.placeholder}
             id={getControlItem.name}
@@ -80,7 +82,7 @@ function CommonForm({ formControls, formData, setFormData, onSubmit, buttonText,
         disabled={isButtondis}
         type="submit"
         className={`mt-2 w-full text-white py-2 rounded-md transition ${
-          isButtondis ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
+          isButtondis ? "bg-gray-400 cursor-not-allowed" : "bg-purple-700 hover:bg-purple-800"
         }`}
       >
         {buttonText || "Submit"}
