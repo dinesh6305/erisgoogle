@@ -1,7 +1,20 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const User = require("../../models/User");
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const User = require('../../models/User'); // Adjust the path as needed
+const passport = require('passport');
 require('dotenv').config();
+
+// Middleware for validating request body
+const validateRequestBody = (req, res, next) => {
+  const { userName, email, password } = req.body;
+  if (!userName || !email || !password) {
+    return res.status(400).json({
+      success: false,
+      message: "UserName, Email and Password are required fields",
+    });
+  }
+  next();
+};
 
 // Register User
 const registerUser = async (req, res) => {
@@ -65,7 +78,7 @@ const loginUser = async (req, res) => {
         email: checkUser.email,
         userName: checkUser.userName,
       },
-      process.env.CLIENT_SECRET_KEY,
+      process.env.JWT_SECRET,
       { expiresIn: "60m" }
     );
 
@@ -107,7 +120,7 @@ const authMiddleware = async (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.CLIENT_SECRET_KEY);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
     next();
   } catch (error) {
@@ -119,17 +132,84 @@ const authMiddleware = async (req, res, next) => {
 };
 
 // Google OAuth login success handler
-const googleAuthSuccess = (req, res) => {
-  if (req.user) {
-    res.redirect('/profile');
-  } else {
-    res.redirect('/login');
-  }
+const generateRandomPassword = () => {
+  return Math.random().toString(36).slice(-8); // Generates a random 8-character password
+};
+
+const googleAuth = passport.authenticate("google", {
+  scope: ["profile", "email"],
+});
+
+// Google auth callback route
+const googleAuthCallback = passport.authenticate("google", {
+  failureRedirect: "/login?googlelogin=failure",
+});
+
+// Generate Access Token
+const generateAccessToken = (user) => {
+  return jwt.sign(
+    {
+      id: user._id,
+      role: user.role,
+      email: user.email,
+      userName: user.userName,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: "60m" }
+  );
+};
+
+// Generate Refresh Token
+const generateRefreshToken = (user) => {
+  return jwt.sign(
+    {
+      id: user._id,
+      role: user.role,
+      email: user.email,
+      userName: user.userName,
+    },
+    process.env.JWT_SECRET,  // Use the same secret as access tokens
+    { expiresIn: "7d" }
+  );
 };
 
 // Google OAuth login failure handler
-const googleAuthFailure = (req, res) => {
-  res.redirect('/login');
+const googleAuthRedirect = (req, res) => {
+  try {
+    // Generate tokens for the authenticated user
+    if (!req.user) {
+      console.error("No user found in request after Google authentication");
+      return res.redirect(
+        "http://localhost:5173/auth/login?googleLogin=failure"
+      );
+    }
+
+    const accessToken = generateAccessToken(req.user);
+    const refreshToken = generateRefreshToken(req.user);
+
+    // Set refresh token as cookie
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Lax", // Changed to Lax for cross-site redirect
+      path: "/auth/refresh-token",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    // Set regular token as cookie too for consistent auth mechanism
+    res.cookie("token", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Lax",
+      maxAge: 60 * 60 * 1000, // 60 minutes to match the token expiration
+    });
+
+    // Redirect to shop/home instead of auth/login
+    res.redirect("http://localhost:5173/shop/home");
+  } catch (error) {
+    console.error("Error in googleAuthRedirect:", error);
+    res.redirect("http://localhost:5173/auth/login?googleLogin=failure");
+  }
 };
 
-module.exports = { registerUser, loginUser, logoutUser, authMiddleware, googleAuthSuccess, googleAuthFailure };
+module.exports = { registerUser, loginUser, logoutUser, authMiddleware, googleAuth, googleAuthCallback, googleAuthRedirect, validateRequestBody };

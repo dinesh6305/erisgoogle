@@ -21,36 +21,28 @@ function createSearchParamsHelper(filters) {
 
 function ShoppingListing() {
     const dispatch = useDispatch();
-    const navigate = useNavigate(); // Add navigate hook for navigation
+    const navigate = useNavigate();
+    const location = useLocation();
     const { user } = useSelector(state => state.auth);
     const { productList: allProducts, productDetails, isLoading } = useSelector(state => state.shopProducts);
     const [filter, setFilters] = useState({});
-    const [tempFilter, setTempFilter] = useState({}); // Temporary filters during selection
+    const [tempFilter, setTempFilter] = useState({});
     const [sort, setSort] = useState("price-lowtohigh");
-    const [tempSort, setTempSort] = useState("price-lowtohigh"); // Temporary sort during selection
+    const [tempSort, setTempSort] = useState("price-lowtohigh");
     const [opendialog, setOpendialog] = useState(false);
     const [searchParams, setSearchParams] = useSearchParams();
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [filterPanelOpen, setFilterPanelOpen] = useState(false); // Track filter panel state
-    const [searchQuery, setSearchQuery] = useState(""); // State for search query
-    const [searchTimeout, setSearchTimeout] = useState(null); // For debouncing search
-    const [isSearching, setIsSearching] = useState(false); // Flag to indicate active search
-    const [filteredProducts, setFilteredProducts] = useState([]); // Filtered products for display
-    
-    // Keep track of whether the initial fetch has happened
+    const [filterPanelOpen, setFilterPanelOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [searchTimeout, setSearchTimeout] = useState(null);
+    const [isSearching, setIsSearching] = useState(false);
+    const [filteredProducts, setFilteredProducts] = useState([]);
     const initialFetchDone = useRef(false);
-    // Store all products for client-side filtering
     const allProductsRef = useRef([]);
-    // Reference for the sort dropdown
     const sortButtonRef = useRef(null);
-    
-    // Add location hook to track navigation
-    const location = useLocation();
 
-    // Initialize from URL or sessionStorage
     useEffect(() => {
         try {
-            // Initialize search query from URL params
             const queryParam = searchParams.get('q');
             if (queryParam) {
                 setSearchQuery(queryParam);
@@ -61,18 +53,15 @@ function ShoppingListing() {
                 }
             }
 
-            // Initialize filters from sessionStorage
             const savedFilters = JSON.parse(sessionStorage.getItem('filters')) || {};
             setFilters(savedFilters);
             setTempFilter(savedFilters);
-            
-            // Initialize sort from sessionStorage
+
             const savedSort = sessionStorage.getItem('sort') || "price-lowtohigh";
             setSort(savedSort);
             setTempSort(savedSort);
         } catch (error) {
             console.error("Error initializing state from storage:", error);
-            // Fallback to default values
             setFilters({});
             setTempFilter({});
             setSort("price-lowtohigh");
@@ -80,54 +69,49 @@ function ShoppingListing() {
         }
     }, []);
 
-    // Clear search when component unmounts (navigating away)
     useEffect(() => {
         return () => {
-            // Clear search state when component unmounts
-            sessionStorage.removeItem('searchQuery');
-            console.log("Cleared search on navigation");
+            clearCache();
         };
     }, []);
 
-    // Fetch all products once on mount
+    const clearCache = () => {
+        sessionStorage.removeItem('searchQuery');
+        sessionStorage.removeItem('filters');
+        sessionStorage.removeItem('sort');
+        console.log("Cleared filters and search query from cache");
+    };
+
     useEffect(() => {
         if (!initialFetchDone.current) {
-            console.log("Fetching all products for client-side filtering");
-            // Fetch all products without filters or search query
             dispatch(fetchAllFilterProducts({ 
                 searchQuery: '',
                 filterParams: {},
-                sortParams: 'price-lowtohigh' // Default sort
+                sortParams: 'price-lowtohigh'
             }));
             initialFetchDone.current = true;
         }
     }, [dispatch]);
 
-    // Store all products in ref when they're loaded
     useEffect(() => {
         if (allProducts && allProducts.length > 0) {
             allProductsRef.current = allProducts;
-            
-            // Apply initial filtering
             applyFiltersAndSearch();
         }
     }, [allProducts]);
 
-    // Apply filters, search and sorting whenever those values change
     useEffect(() => {
         if (allProductsRef.current.length > 0) {
             applyFiltersAndSearch();
         }
     }, [filter, sort, searchQuery]);
 
-    // Function to filter, search and sort products client-side
     const applyFiltersAndSearch = () => {
         setIsSearching(true);
-        
+
         setTimeout(() => {
             let results = [...allProductsRef.current];
-            
-            // Apply search
+
             if (searchQuery.trim()) {
                 const query = searchQuery.toLowerCase();
                 results = results.filter(product => 
@@ -136,23 +120,22 @@ function ShoppingListing() {
                     (product.category && product.category.toLowerCase().includes(query))
                 );
             }
-            
-            // Apply filters
+
             if (Object.keys(filter).length > 0) {
                 Object.keys(filter).forEach(filterKey => {
                     if (filter[filterKey].length > 0) {
                         results = results.filter(product => {
-                            // Check if the product has the property and it matches any of the filter values
                             return filter[filterKey].some(filterValue => {
-                                // Handle different filter types
                                 if (filterKey === 'category') {
                                     return product.category === filterValue;
                                 } else if (filterKey === 'priceRange') {
                                     const [min, max] = filterValue.split('-').map(Number);
-                                    const price = parseFloat(product.salePrice); // Changed from price to salePrice
+                                    const price = parseFloat(product.salePrice);
                                     return price >= min && (max === 0 || price <= max);
                                 } else if (filterKey === 'rating') {
                                     return product.rating >= parseInt(filterValue);
+                                } else if (filterKey === 'color') {
+                                    return product.color && product.color.toLowerCase() === filterValue.toLowerCase();
                                 }
                                 return false;
                             });
@@ -160,14 +143,13 @@ function ShoppingListing() {
                     }
                 });
             }
-            
-            // Apply sorting
+
             results.sort((a, b) => {
                 switch (sort) {
                     case 'price-lowtohigh':
-                        return parseFloat(a.salePrice) - parseFloat(b.salePrice); // Changed from price to salePrice
+                        return parseFloat(a.salePrice) - parseFloat(b.salePrice);
                     case 'price-hightolow':
-                        return parseFloat(b.salePrice) - parseFloat(a.salePrice); // Changed from price to salePrice
+                        return parseFloat(b.salePrice) - parseFloat(a.salePrice);
                     case 'rating-hightolow':
                         return (b.rating || 0) - (a.rating || 0);
                     case 'newest':
@@ -178,10 +160,10 @@ function ShoppingListing() {
                         return 0;
                 }
             });
-            
+
             setFilteredProducts(results);
             setIsSearching(false);
-        }, 300); // Small delay to show loading state
+        }, 300);
     };
 
     useEffect(() => {
@@ -190,110 +172,72 @@ function ShoppingListing() {
         }
     }, [productDetails]);
 
-    // Initialize tempFilter and tempSort when filter panel opens
     useEffect(() => {
         if (filterPanelOpen) {
             setTempFilter({ ...filter });
             setTempSort(sort);
         }
     }, [filterPanelOpen, filter, sort]);
-    
+
     function handleGetproductdetails(currentid) {
-        console.log("Fetching product details for ID:", currentid);
-        
-        // Make sure we have a valid ID
         if (!currentid) {
             console.error("Invalid product ID:", currentid);
             return;
         }
-        
-        // Dispatch action to fetch product details
         dispatch(fetchProductsDetails({ id: currentid }));
     }
 
-    function handleSort(value) {
-        setSort(value);
-        sessionStorage.setItem('sort', value);
-        console.log("Sort value changed to:", value);
-        setDropdownOpen(false);
-    }
-
-    // Toggle dropdown
-    function toggleDropdown() {
-        setDropdownOpen(!dropdownOpen);
-    }
-
-    // Handle sort change within filter panel
     function handleTempSort(value) {
         setTempSort(value);
-        console.log("Temp sort value changed to:", value);
     }
 
-    // Handle search with debounce
     const handleSearch = useCallback((e) => {
         const query = e.target.value;
         setSearchQuery(query);
         setIsSearching(true);
-        
-        // Clear any existing timeout
+
         if (searchTimeout) clearTimeout(searchTimeout);
-        
-        // Save search to sessionStorage
+
         sessionStorage.setItem('searchQuery', query);
-        
-        // Update URL params
+
         if (query) {
             searchParams.set('q', query);
         } else {
             searchParams.delete('q');
         }
         setSearchParams(searchParams);
-        
-        // Set a new timeout to delay the search
+
         const timeoutId = setTimeout(() => {
             console.log("Searching for:", query);
-            // Client-side searching happens in the useEffect via applyFiltersAndSearch
-        }, 500); // 500ms delay
-        
+        }, 500);
         setSearchTimeout(timeoutId);
     }, [searchTimeout, searchParams]);
 
-    // Clear search field
     const clearSearch = useCallback(() => {
         setSearchQuery('');
         sessionStorage.removeItem('searchQuery');
         searchParams.delete('q');
         setSearchParams(searchParams);
-        
-        // Client-side filtering will be triggered by the useEffect
         setIsSearching(false);
     }, [searchParams]);
 
-    // Update URL when filter changes
     useEffect(() => {
         if (filter && Object.keys(filter).length > 0) {
             const queryString = createSearchParamsHelper(filter);
-            console.log("Updated search params:", queryString);
-            
-            // Preserve the search query when updating filters
             const currentParams = new URLSearchParams(queryString);
             if (searchQuery) {
                 currentParams.set('q', searchQuery);
             }
-            
             setSearchParams(currentParams);
         } else if (searchQuery) {
-            // If there are no filters but there is a search query
             const params = new URLSearchParams();
             params.set('q', searchQuery);
             setSearchParams(params);
         } else {
-            // Clear params if no filters and no search
             setSearchParams({});
         }
     }, [filter, searchQuery, setSearchParams]);
 
-    // Modified to work with temp filter for the panel
     function handleFilter(getSectionId, getCurrentOption) {
         let cpyFilters = { ...tempFilter };
         if (!cpyFilters[getSectionId]) {
@@ -308,44 +252,32 @@ function ShoppingListing() {
             cpyFilters[getSectionId].splice(indexOfCurrentOption, 1);
         }
 
-        // Remove empty arrays
         if (cpyFilters[getSectionId].length === 0) {
             delete cpyFilters[getSectionId];
         }
 
-        console.log("Updated temp filters:", cpyFilters);
         setTempFilter(cpyFilters);
     }
 
-    // Apply filters and sort, then close panel
     function applyFilters() {
         setFilters({ ...tempFilter });
         setSort(tempSort);
         sessionStorage.setItem('filters', JSON.stringify(tempFilter));
         sessionStorage.setItem('sort', tempSort);
         setFilterPanelOpen(false);
-        
-        // Client-side filtering will be triggered by useEffect
     }
 
-    // Clear all filters and reset sort to default
     function clearFilters() {
         const emptyFilters = {};
         setTempFilter(emptyFilters);
         setTempSort("price-lowtohigh");
-
-        // Immediately apply cleared filters
         setFilters(emptyFilters);
         setSort("price-lowtohigh");
         sessionStorage.setItem('filters', JSON.stringify(emptyFilters));
         sessionStorage.setItem('sort', "price-lowtohigh");
-        
-        console.log("All filters cleared and sort reset");
-        
-        // Client-side filtering will be triggered by useEffect
     }
 
-    // Close filter panel when clicking outside
+    
     useEffect(() => {
         function handleClickOutside(e) {
             const filterPanel = document.getElementById('filter-panel');
@@ -364,7 +296,7 @@ function ShoppingListing() {
         };
     }, [filterPanelOpen]);
 
-    // Close sort dropdown when clicking outside
+    
     useEffect(() => {
         function handleClickOutside(e) {
             if (sortButtonRef.current && !sortButtonRef.current.contains(e.target)) {
@@ -381,12 +313,12 @@ function ShoppingListing() {
         };
     }, [dropdownOpen]);
 
-    // Highlight search terms in product titles
+   
     const highlightSearchTerm = (text, searchTerm) => {
         if (!searchTerm || typeof text !== 'string') return text;
         
         try {
-            // Escape special regex characters in the search term
+            
             const escapedSearchTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             const regex = new RegExp(`(${escapedSearchTerm})`, 'gi');
             const parts = text.split(regex);
@@ -490,14 +422,14 @@ function ShoppingListing() {
                     <div className="p-4 border-t border-gray-700 flex justify-between sticky bottom-0 bg-black">
                         <Button
                             variant="outline"
-                            className="flex-1 mr-2 bg-white text-black hover:bg-gray-200"
+                            className="flex-1 mr-2 bg-purple-700 text-black hover:bg-purple-800"
                             onClick={clearFilters}
                         >
                             Clear All
                         </Button>
                         <Button
                             variant="default"
-                            className="flex-1 bg-white text-black hover:bg-gray-200"
+                            className="flex-1 bg-purple-700 text-black hover:bg-purple-800"
                             onClick={applyFilters}
                         >
                             Apply
@@ -550,7 +482,9 @@ function ShoppingListing() {
                                 <Button
                                     variant="outline"
                                     size="icon"
-                                    onClick={() => navigate("/shop/home")}
+                                    onClick={() => {navigate("/shop/home");
+                                        clearCache();}
+                                    }
                                 >
                                     <ArrowLeftIcon className="h-5 w-5 text-white" />
                                 </Button>
@@ -559,7 +493,7 @@ function ShoppingListing() {
                             {/* Middle section - Title */}
                             <div className="flex justify-center items-center">
                                 
-                                <h2 className="text-lg font-bold text-white md:hidden ml-2 text-left sm:text-2xl">
+                                <h2 className="text-lg font-bold text-white  ml-2 text-left sm:text-2xl">
                                     All Products
                                 </h2>
                             </div>
@@ -647,6 +581,15 @@ function ShoppingListing() {
                     />
                 )}
             </div>
+            <Button
+                            id="filter-toggle-btn"
+                            variant="default"
+                            size="icon"
+                            className="fixed bottom-6 right-6 h-12 w-12 rounded-full z-30 bg-purple-700 hover:bg-purple-600 shadow-lg flex items-center justify-center"
+                            onClick={() => setFilterPanelOpen(true)}
+                        >
+                            <FilterIcon className="h-5 w-5" />
+                        </Button>
         </div>
     );
 }

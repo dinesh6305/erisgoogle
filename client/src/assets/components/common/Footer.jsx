@@ -52,17 +52,17 @@ const Footer = () => {
                     <div>
                         <h3 className="text-xl font-semibold mb-5 hover:text-purple-400">Company</h3>
                         <div className="flex flex-col gap-2">
-                            <Link to="/about" className="text-text opacity-80 transition-colors duration-300 ease-in-out hover:text-primary hover:text-purple-400">About Us</Link>
-                            <Link to="/contact" className="text-text opacity-80 transition-colors duration-300 ease-in-out hover:text-primary hover:text-purple-400">Contact Us</Link>
-                            <Link to="/careers" className="text-text opacity-80 transition-colors duration-300 ease-in-out hover:text-primary hover:text-purple-400">Careers</Link>
-                            <Link to="/press" className="text-text opacity-80 transition-colors duration-300 ease-in-out hover:text-primary hover:text-purple-400">Press</Link>
-                            <Link to="/blog" className="text-text opacity-80 transition-colors duration-300 ease-in-out hover:text-primary hover:text-purple-400">Blog</Link>
+                            <Link to="/about" className="text-text opacity-80 transition-colors duration-300 ease-in-out  hover:text-purple-400">About Us</Link>
+                            <Link to="/contact" className="text-text opacity-80 transition-colors duration-300 ease-in-out  hover:text-purple-400">Contact Us</Link>
+                            <Link to="/careers" className="text-text opacity-80 transition-colors duration-300 ease-in-out  hover:text-purple-400">Careers</Link>
+                            <Link to="/press" className="text-text opacity-80 transition-colors duration-300 ease-in-out  hover:text-purple-400">Press</Link>
+                            <Link to="/blog" className="text-text opacity-80 transition-colors duration-300 ease-in-out  hover:text-purple-400">Blog</Link>
                         </div>
                     </div>
                 </div>
 
                 <div className="flex justify-between items-center pt-5 border-t border-border flex-col gap-5 text-center md:gap-0 md:flex-row">
-                    <p className="text-text opacity-70 text-sm">&copy; {new Date().getFullYear()} BOAT. All rights reserved.</p>
+                    <p className="text-text opacity-70 text-sm">&copy; {new Date().getFullYear()} Eris. All rights reserved.</p>
                     <div className="flex gap-5 flex-col sm:flex-row">
                         <Link to="/privacy" className="text-text opacity-70 text-sm transition-colors duration-300 ease-in-out hover:text-primary">Privacy Policy</Link>
                         <Link to="/terms" className="text-text opacity-70 text-sm transition-colors duration-300 ease-in-out hover:text-primary">Terms of Service</Link>

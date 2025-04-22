@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { LoginFormControls } from "../../../config";
-import CommonForm from "../../components/common/commonform"; 
+import CommonForm from "../../components/common/CommonForm"; 
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../../store/auth-slice";
 import { toast } from "react-hot-toast";
@@ -30,11 +30,11 @@ function AuthLogin() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-md space-y-6 p-6 border rounded-lg shadow-md bg-white">
+    <div className="mx-auto w-full max-w-md space-y-6 p-6  rounded-lg shadow-md bg-gray-900 text-white">
       <div className="text-center">
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">Login Here</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-white">Login Here</h1>
         <p className="mt-2 text-gray-600">
-          <Link className="font-medium text-blue-600 hover:underline" to="/auth/register">
+          <Link className="font-medium text-purple-700 hover:underline" to="/auth/register">
             Sign Up
           </Link>
         </p>
@@ -47,6 +47,9 @@ function AuthLogin() {
         setFormData={setFormData}
         onSubmit={onSubmit}
       />
+      <span className="flex justify-center">
+        OR
+      </span>
 
       <div className="text-center">
         <GoogleAuth />

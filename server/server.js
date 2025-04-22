@@ -6,7 +6,7 @@ require('dotenv').config();
 const passport = require('passport');
 const session = require('express-session');
 const authRoutes = require('./routes/auth/authRoutes');
-const googleAuthRoutes = require('./routes/auth/googleauth'); // Google Auth Routes
+
 const adminProductRouter = require("./routes/Admin/productsroutes");
 const shopProductsRouter = require("./routes/shop/shopproductRoute");
 const shopCartRouter = require("./routes/shop/cart-routes");
@@ -14,7 +14,7 @@ const addressRouter = require("./routes/shop/Adresss-rote");
 require('./config/passport'); // Passport configuration
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 5000;
 
 const mongoURI = process.env.MONGO_URI;
 
@@ -36,7 +36,12 @@ app.use(cors({
     credentials: true
 }));
 app.use(cookieParser());
-app.use(session({ secret: 'your-secret-key', resave: true, saveUninitialized: true }));
+app.use(session({ 
+    secret: process.env.JWT_SECRET || 'your-secret-key', 
+    resave: true, 
+    saveUninitialized: true,
+    cookie: { secure: process.env.NODE_ENV === 'production' } 
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -49,11 +54,20 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/auth', googleAuthRoutes); // Add Google Auth routes
+// Add Google Auth routes
 app.use('/api/admin/products', adminProductRouter);
 app.use('/api/shop/products', shopProductsRouter);
 app.use("/api/shop/cart", shopCartRouter);
 app.use("/api/shop/address", addressRouter);
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error('❌ Error:', err);
+    res.status(500).json({
+        success: false,
+        message: 'Internal Server Error',
+    });
+});
 
 app.listen(port, () => {
     console.log(`🚀 Server is running on port ${port}`);

@@ -153,29 +153,36 @@ const CartPage = () => {
 
   if (error) {
     return (
+      <div className="bg-black h-screen">
+      
+      <div className="mt-19">
       <div className="max-w-6xl mx-auto p-6">
-        <h1 className="text-2xl font-medium text-red-800 mb-8">Error</h1>
+        <h1 className="text-2xl font-medium text-white mb-8">Error</h1>
         <div className="text-center">
-          <p className="text-gray-600 mb-4">{error}</p>
+          <p className="text-white mb-4">{error}</p>
         </div>
+      </div>
+      </div>
       </div>
     );
   }
 
   if (!items?.length) {
     return (
-      <div className="max-w-6xl mx-auto p-6">
-        <h1 className="text-2xl font-medium text-green-800 mb-8">My Cart</h1>
+      <div className="bg-black h-screen ">
+      <div className=" mt-19 bg-gray-700 p-6 lg:w-full">
+        <h1 className="text-2xl font-medium text-white mb-8 text-center">My Cart</h1>
         <div className="text-center">
           <ShoppingBag className="mx-auto h-16 w-16 text-gray-400 mb-4" />
-          <p className="text-gray-600 mb-4">Your cart is empty</p>
+          <p className="text-white mb-4">Your cart is empty</p>
           <button
-            onClick={() => navigate("/wallpapers")}
-            className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
+            onClick={() => navigate("/shop/listing")}
+            className="bg-purple-700 text-white px-6 py-2 rounded-lg hover:bg-purple-800 cursor-pointer transition-colors"
           >
             Start Shopping
           </button>
         </div>
+      </div>
       </div>
     );
   }

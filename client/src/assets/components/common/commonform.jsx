@@ -8,9 +8,20 @@ function CommonForm({ formControls, formData, setFormData, onSubmit, buttonText,
 
     switch (getControlItem.componentType) {
       case "input":
+  element = (
+    <input
+      className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-700 bg-gray-700 text-white placeholder-gray-400"
+      name={getControlItem.name}
+      placeholder={getControlItem.placeholder}
+      id={getControlItem.name}
+      type={getControlItem.type || "text"} // Default type if not provided
+      value={value}
+      onChange={(event) => setFormData({ ...formData, [getControlItem.name]: event.target.value })}
+    />
+  );
         element = (
           <input
-            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-700"
+            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-700 "
             name={getControlItem.name}
             placeholder={getControlItem.placeholder}
             id={getControlItem.name}
@@ -55,7 +66,7 @@ function CommonForm({ formControls, formData, setFormData, onSubmit, buttonText,
       default:
         element = (
           <input
-            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 "
             name={getControlItem.name}
             placeholder={getControlItem.placeholder}
             id={getControlItem.name}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { HousePlug, Menu, ShoppingCart, UserCog, LogOut } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "../ui/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { FiSun, FiMoon, FiShoppingCart, FiUser, FiSearch, FiMenu, FiX, FiChevronDown } from 'react-icons/fi';
@@ -86,7 +86,7 @@ function HeaderRightContent({ handleLogout, cartItemsCount }) {
 
 function MenuItem({ onLinkClick, handleLogout, isAuthenticated }) {
     const navigate = useNavigate();
-    // Updated to include "Neckband" instead of "Speaker"
+    const location = useLocation(); // Get the current route
     const categoryItems = shoppingViewHeaderMenuItems.filter(item => ["Earphones", "Earbuds", "Neckband", "Headphone"].includes(item.label));
     const otherItems = shoppingViewHeaderMenuItems.filter(item => !["Earphones", "Earbuds", "Neckband", "Headphone"].includes(item.label));
 
@@ -95,7 +95,14 @@ function MenuItem({ onLinkClick, handleLogout, isAuthenticated }) {
             {shoppingViewHeaderMenuItems && shoppingViewHeaderMenuItems.length > 0 ? (
                 <>
                     {otherItems.map((item) => (
-                        <Link className="font-bold text-white text-1xl hover:text-purple-400" key={item.id} to={item.path} onClick={onLinkClick}>
+                        <Link
+                            className={`font-bold text-1xl hover:text-purple-400 ${
+                                location.pathname === item.path ? "text-purple-700" : "text-white"
+                            }`}
+                            key={item.id}
+                            to={item.path}
+                            onClick={onLinkClick}
+                        >
                             {item.label}
                         </Link>
                     ))}
@@ -117,7 +124,9 @@ function MenuItem({ onLinkClick, handleLogout, isAuthenticated }) {
                                         navigate(item.path);
                                         onLinkClick && onLinkClick();
                                     }}
-                                    className="p-2 flex items-center gap-4 text-white rounded-md lg:cursor-pointer transition-all hover:border-1 mt-1"
+                                    className={`p-2 flex items-center gap-4 rounded-md lg:cursor-pointer transition-all hover:border-1 mt-1 ${
+                                        location.pathname === item.path ? "bg-purple-700 text-white" : "text-white"
+                                    }`}
                                 >
                                     {item.label}
                                 </DropdownMenuItem>
@@ -126,7 +135,14 @@ function MenuItem({ onLinkClick, handleLogout, isAuthenticated }) {
                     </DropdownMenu>
                     {/* Separate items for small screens */}
                     {categoryItems.map((item) => (
-                        <Link className="font-bold text-white text-1xl hover:text-purple-400 lg:hidden" key={item.id} to={item.path} onClick={onLinkClick}>
+                        <Link
+                            className={`font-bold text-1xl hover:text-purple-400 lg:hidden ${
+                                location.pathname === item.path ? "text-purple-700" : "text-white"
+                            }`}
+                            key={item.id}
+                            to={item.path}
+                            onClick={onLinkClick}
+                        >
                             {item.label}
                         </Link>
                     ))}

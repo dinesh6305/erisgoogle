@@ -393,11 +393,11 @@ function Headphones() {
 
     return (
         <div className="bg-black min-h-screen">
-            <div className="mt-20">
+            <div className="p-4 mx-auto container">
             {/* Filter panel - responsive: slides from bottom on mobile, from side on desktop */}
             <div
                 id="filter-panel"
-                className={`fixed bg-black z-50 transition-all duration-300 ease-in-out overflow-y-auto
+                className={`fixed bg-black z-50 transition-all duration-300 ease-in-out overflow-y-auto 
                     ${isMobileView
                         ? `top-0 left-0 h-full w-[80%] max-w-[300px] ${filterPanelOpen ? 'translate-x-0' : '-translate-x-full'} border-r border-gray-700`
                         : `top-0 left-0 h-full w-[80%] max-w-[300px] ${filterPanelOpen ? 'translate-x-0' : '-translate-x-full'} border-r border-gray-700`
@@ -513,7 +513,7 @@ function Headphones() {
                 ></div>
             )}
 
-            <div className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-6 p-6 bg-black text-white mt-20 lg:mt-1">
+            <div className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-6 p-6 bg-black text-white mt-10">
                 <div className="bg-background w-full rounded-lg shadow-sm col-span-full">
                     {/* Search Box in the sticky header */}
                     <div className="p-4 border-b bg-black sticky top-0 z-20 flex justify-center lg:justify-start">

@@ -391,7 +391,7 @@ function Earbuds() {
 
     return (
         <div className="bg-black min-h-screen">
-            <div className="mt-20">
+            <div className="container mx-auto p-4">
             {/* Filter panel - responsive: slides from bottom on mobile, from side on desktop */}
             <div
                 id="filter-panel"
@@ -511,7 +511,7 @@ function Earbuds() {
                 ></div>
             )}
 
-            <div className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-6 p-6 bg-black text-white mt-20 lg:mt-1">
+            <div className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-6 p-6 bg-black text-white mt-10">
                 <div className="bg-background w-full rounded-lg shadow-sm col-span-full">
                     {/* Search Box in the sticky header */}
                     <div className="p-4 border-b bg-black sticky top-0 z-20 flex justify-center lg:justify-start">

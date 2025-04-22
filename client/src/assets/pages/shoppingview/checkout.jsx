@@ -18,6 +18,7 @@ import CommonForm from "@/assets/components/common/commonform";
 import { addressFormControls } from "@/config";
 import { unwrapResult } from '@reduxjs/toolkit';
 import { useToast } from "../../hooks/useToast";
+import Checkout from "@/assets/components/checkout/checkout";
 
 const initialAddressFormData = {
   name: "",
@@ -174,7 +175,7 @@ function Shoppingcheckout() {
     };
 
     const handleContinueShopping = () => {
-        navigate("/wallpapers");
+        navigate("/shop/");
     };
 
     const handleCheckout = () => {
@@ -193,50 +194,7 @@ function Shoppingcheckout() {
                     <h1 className="text-3xl font-bold text-center text-white">Shopping Cart</h1>
                     <div className="flex flex-col md:flex-row gap-6 p-4">
                         <div className="w-full md:w-1/2">
-                            <Card>
-                                <div className="mb-5 p-3 grid grid-cols-1  md:grid-cols-2 gap-3 ">
-                                    {addressList.map((address) => (
-                                        <div className="bg-gray-800 text-white p-4 lg:w-[350px] lg:p-4 rounded-lg" key={address._id}>
-                                            {generateAddressLabels(address)}
-                                            <div className="p-3 flex justify-around gap-9 text-white">
-                                                <button
-                                                    className="w-full bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-center mt-3 py-3 cursor-pointer rounded-lg"
-                                                    onClick={() => {
-                                                        setEditId(address._id);
-                                                        setFormData(address);
-                                                    }}
-                                                >
-                                                    Edit
-                                                </button>
-                                                <button
-                                                    className="w-full bg-purple-700 hover:bg-purple-800 text-white flex items-center justify-center mt-3 py-3 cursor-pointer rounded-lg"
-                                                    onClick={() => dispatch(deleteAddress({ userId: user.id, addressId: address._id }))}
-                                                >
-                                                    Delete
-                                                </button>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                <CardHeader>
-                                    <CardTitle>{editid ? "Edit Address" : "Add New Address"}</CardTitle>
-                                </CardHeader>
-                                <div className="  bg-gray-800  p-5 ">
-
-                                <CardContent className="space-y-3 text-white">
-                                    <CommonForm
-                                        formControls={addressFormControls}
-                                        formData={formData}
-                                        setFormData={setFormData}
-                                        buttonText={editid ? "Update" : "Add"}
-                                        onSubmit={handleManageAddress}
-                                        isButtondis={!isFormValid()}
-                                        className=""
-                                    />
-                                </CardContent>
-                                </div>
-                            </Card>
+                            <Checkout/>
                         </div>
                         
                         {/* Right side content - Cart Summary */}
@@ -290,7 +248,7 @@ function Shoppingcheckout() {
                                                                         <Plus className="w-3 h-3" />
                                                                     </button>
                                                                 </div>
-                                                                <p className="font-medium">₹{(item.totalPrice ?? 0).toFixed(2)}</p>
+                                                                <p className="font-medium">₹{(item.price ?? 0).toFixed(2)}</p>
                                                             </div>
                                                         </div>
                                                     </div>
